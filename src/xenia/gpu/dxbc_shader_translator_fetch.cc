@@ -78,15 +78,9 @@ void DxbcShaderTranslator::ProcessVertexFetchInstruction(
       // makes no sense for addressing, both 1.5 and 2.5 would be 2).
       {
         bool index_operand_temp_pushed = false;
-        dxbc::Src index_operand(
-            LoadOperand(instr.operands[0], 0b0001, index_operand_temp_pushed)
-                .SelectFromSwizzled(0));
-        if (instr.attributes.is_index_rounded) {
-          a_.OpAdd(address_dest, index_operand, dxbc::Src::LF(0.5f));
-          a_.OpRoundNI(address_dest, address_src);
-        } else {
-          a_.OpRoundNI(address_dest, index_operand);
-        }
+        dxbc::Src index_operand(LoadOperand(instr.operands[0], 0b0001, index_operand_temp_pushed).SelectFromSwizzled(0));
+        a_.OpAdd(address_dest, index_operand, dxbc::Src::LF(0.005f));
+        a_.OpRoundNI(address_dest, address_src);
         if (index_operand_temp_pushed) {
           PopSystemTemp();
         }
